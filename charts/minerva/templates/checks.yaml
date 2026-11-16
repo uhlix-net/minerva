@@ -1,0 +1,26 @@
+{{- /*
+Install-time checks that need the Kubernetes API. `lookup` returns nothing under `helm template`
+or --dry-run=client, so these only run against a live cluster.
+*/ -}}
+{{- if lookup "v1" "Namespace" "" "kube-system" }}
+{{- if .Values.preflight.requireStorageClass }}
+{{- range $sc := list .Values.persistence.storageClass (ternary .Values.postgresql.storageClass "" .Values.postgresql.enabled) }}
+{{- if and $sc (not (lookup "storage.k8s.io/v1" "StorageClass" "" $sc)) }}
+{{- fail (printf "Minerva preflight: StorageClass %q does not exist in this cluster." $sc) }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- with .Values.ingress.tls.secretName }}
+{{- if and $.Values.preflight.requireTlsSecret (not (lookup "v1" "Secret" $.Release.Namespace .)) }}
+{{- fail (printf "Minerva preflight: TLS secret %q not found in namespace %q. Create it first (kubectl create secret tls ...)." . $.Release.Namespace) }}
+{{- end }}
+{{- end }}
+{{- range $s := list .Values.oidc.existingSecret .Values.ldap.existingSecret .Values.admin.existingSecret .Values.postgresql.externalSecret }}
+{{- if and $s (not (lookup "v1" "Secret" $.Release.Namespace $s)) }}
+{{- fail (printf "Minerva preflight: secret %q not found in namespace %q." $s $.Release.Namespace) }}
+{{- end }}
+{{- end }}
+{{- if and .Values.extraCA.configMap (not (lookup "v1" "ConfigMap" .Release.Namespace .Values.extraCA.configMap)) }}
+{{- fail (printf "Minerva preflight: CA configmap %q not found in namespace %q." .Values.extraCA.configMap .Release.Namespace) }}
+{{- end }}
+{{- end }}

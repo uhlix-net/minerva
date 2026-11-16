@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "minerva.fullname" . }}
+  labels: {{- include "minerva.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}   # the data volume is ReadWriteOnce
+  selector:
+    matchLabels: {{- include "minerva.selector" . | nindent 6 }}
+      app.kubernetes.io/component: app
+  template:
+    metadata:
+      labels: {{- include "minerva.selector" . | nindent 8 }}
+        app.kubernetes.io/component: app
+      annotations:
+        checksum/config: {{ toJson .Values | sha256sum | trunc 16 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: minerva
+          image: {{ include "minerva.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - {name: http, containerPort: 8080}
+          env:
+            {{- include "minerva.commonEnv" . | nindent 12 }}
+            - name: MINERVA_SESSION_SECRET
+              valueFrom: {secretKeyRef: {name: {{ include "minerva.secret" . }}, key: session-secret}}
+            - name: MINERVA_ADMIN_USERNAME
+              valueFrom: {secretKeyRef: {name: {{ .Values.admin.existingSecret | default (include "minerva.secret" .) }}, key: {{ ternary "username" "admin-username" (not (empty .Values.admin.existingSecret)) }}}}
+            - name: MINERVA_ADMIN_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ .Values.admin.existingSecret | default (include "minerva.secret" .) }}, key: {{ ternary "password" "admin-password" (not (empty .Values.admin.existingSecret)) }}}}
+            {{- if .Values.postgresql.enabled }}
+            - name: DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ include "minerva.secret" . }}, key: db-password}}
+            - name: DATABASE_URL
+              value: "postgres://minerva:$(DB_PASSWORD)@{{ include "minerva.fullname" . }}-db:5432/minerva"
+            {{- else }}
+            - name: DATABASE_URL
+              valueFrom: {secretKeyRef: {name: {{ required "postgresql.externalSecret is required when postgresql.enabled=false" .Values.postgresql.externalSecret }}, key: url}}
+            {{- end }}
+            {{- if .Values.ingress.tls.secretName }}
+            - name: MINERVA_TLS_CERT_FILE
+              value: /etc/minerva-tls/tls.crt
+            {{- end }}
+          volumeMounts:
+            - {name: data, mountPath: /data}
+            - {name: tmp, mountPath: /tmp}
+            {{- include "minerva.caMount" . | nindent 12 }}
+            {{- if .Values.ingress.tls.secretName }}
+            - {name: tls, mountPath: /etc/minerva-tls, readOnly: true}
+            {{- end }}
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 20
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            periodSeconds: 10
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: {{ include "minerva.fullname" . }}-data}
+        - name: tmp
+          emptyDir: {}
+        {{- include "minerva.caVolume" . | nindent 8 }}
+        {{- if .Values.ingress.tls.secretName }}
+        - name: tls
+          secret: {secretName: {{ .Values.ingress.tls.secretName }}, items: [{key: tls.crt, path: tls.crt}]}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,95 @@
+# -- Public URL of Minerva (required). Used for SSO redirects and the install checks.
+baseUrl: ""
+siteName: Minerva
+
+image:
+  repository: ghcr.io/uhlix-net/minerva
+  tag: ""            # defaults to the chart appVersion
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+# -- Default administrator, created only when the database has no users.
+admin:
+  username: admin
+  password: admin
+  existingSecret: ""   # secret with keys `username` and `password` (overrides the two values above)
+
+# -- Session signing secret. Generated on first install and kept on upgrades if empty.
+sessionSecret: ""
+
+# -- Built-in modules to enable. Unconfigured auth modules stay inactive.
+modules: [auth-local, auth-oidc, auth-ldap, checks-core, markdown-import]
+
+oidc:
+  enabled: false
+  issuer: ""             # e.g. https://auth.example.com/application/o/minerva/
+  displayName: Single sign-on
+  scopes: openid profile email groups
+  usernameClaim: preferred_username
+  groupsClaim: groups
+  adminGroups: []        # members become Minerva administrators
+  allowedGroups: []      # empty = every user the provider lets through
+  existingSecret: ""     # keys `client-id` and `client-secret`
+
+ldap:
+  enabled: false
+  url: ""                # ldaps://dc.example.com:636
+  bindDn: ""
+  userBase: ""
+  userFilter: "(&(objectClass=user)(sAMAccountName={{username}}))"
+  adminGroups: []        # group DNs
+  allowedGroups: []
+  displayName: Directory account
+  existingSecret: ""     # key `bind-password`
+
+# -- Extra CA certificates (PEM) to trust, e.g. a private CA for the IdP or LDAP server.
+extraCA:
+  configMap: ""
+  key: ca.crt
+
+smtp:
+  host: ""
+  port: 25
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts: []              # extra host names (the baseUrl host is always included)
+  tls:
+    secretName: ""       # existing kubernetes.io/tls secret; empty = no TLS on the ingress
+
+persistence:
+  storageClass: ""       # empty = cluster default
+  size: 5Gi
+  accessMode: ReadWriteOnce
+
+postgresql:
+  enabled: true
+  image: docker.io/library/postgres:16.14
+  storageClass: ""
+  size: 5Gi
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {memory: 512Mi}
+  # -- Used when postgresql.enabled=false: secret with key `url` (postgres://user:pass@host:5432/db)
+  externalSecret: ""
+
+resources:
+  requests: {cpu: 100m, memory: 192Mi}
+  limits: {memory: 768Mi}
+
+# -- Install-time checks.
+preflight:
+  enabled: true          # Helm pre-install/pre-upgrade Job: DNS, TLS cert, IdP/LDAP reachability, secrets
+  requireStorageClass: true
+  requireTlsSecret: true
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroup: 10001
+  seccompProfile: {type: RuntimeDefault}

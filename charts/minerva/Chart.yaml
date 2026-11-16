@@ -1,0 +1,12 @@
+apiVersion: v2
+name: minerva
+description: Minerva - a modular, self-hosted knowledge base (spaces, pages, word-processor editor with Markdown, themes, SSO).
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/uhlix-net/minerva
+sources:
+  - https://github.com/uhlix-net/minerva
+icon: https://raw.githubusercontent.com/uhlix-net/minerva/main/assets/minerva-mark.svg
+keywords: [wiki, knowledge-base, documentation, confluence-alternative]
+kubeVersion: ">=1.27.0-0"

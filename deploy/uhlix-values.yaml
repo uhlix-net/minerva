@@ -1,0 +1,20 @@
+# Minerva on the uhlix k3s production cluster (namespace minerva).
+# Out-of-band objects: secret minerva-tls (AD CS cert, leaf + ad-WNPRGR04-CA), secret minerva-oidc
+# (Authentik "Provider for Minerva": client-id, client-secret), configmap uhlix-ca (AD CA chain).
+baseUrl: https://minerva.me.uhlix.net
+image: {pullPolicy: IfNotPresent}
+ingress:
+  hosts: [minerva]
+  tls: {secretName: minerva-tls}
+oidc:
+  enabled: true
+  issuer: https://auth.me.uhlix.net/application/o/minerva/
+  displayName: Sign in with Authentik
+  scopes: openid profile email
+  adminGroups: [Authentik-Admins]
+  existingSecret: minerva-oidc
+extraCA: {configMap: uhlix-ca, key: uhlix-ca.pem}
+smtp: {host: mail.me.uhlix.net, port: 25}
+persistence: {storageClass: longhorn, size: 5Gi}
+postgresql: {storageClass: longhorn, size: 5Gi}
+nodeSelector: {storage.uhlix.net/longhorn: "true"}

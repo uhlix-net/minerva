@@ -1,0 +1,72 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "minerva.fullname" . }}-db
+  labels: {{- include "minerva.labels" . | nindent 4 }}
+spec:
+  selector: {{- include "minerva.selector" . | nindent 4 }}
+    app.kubernetes.io/component: db
+  ports:
+    - {name: postgres, port: 5432, targetPort: 5432}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "minerva.fullname" . }}-db
+  labels: {{- include "minerva.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "minerva.fullname" . }}-db
+  replicas: 1
+  selector:
+    matchLabels: {{- include "minerva.selector" . | nindent 6 }}
+      app.kubernetes.io/component: db
+  template:
+    metadata:
+      labels: {{- include "minerva.selector" . | nindent 8 }}
+        app.kubernetes.io/component: db
+    spec:
+      securityContext:
+        fsGroup: 999
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: postgres
+          image: {{ .Values.postgresql.image }}
+          env:
+            - {name: POSTGRES_USER, value: minerva}
+            - {name: POSTGRES_DB, value: minerva}
+            - name: POSTGRES_PASSWORD
+              valueFrom: {secretKeyRef: {name: {{ include "minerva.secret" . }}, key: db-password}}
+            - {name: PGDATA, value: /var/lib/postgresql/data/pgdata}
+          ports:
+            - {containerPort: 5432}
+          readinessProbe:
+            exec: {command: [pg_isready, -U, minerva, -d, minerva]}
+            periodSeconds: 10
+          livenessProbe:
+            exec: {command: [pg_isready, -U, minerva, -d, minerva]}
+            periodSeconds: 30
+            initialDelaySeconds: 30
+          resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
+          volumeMounts:
+            - {name: pgdata, mountPath: /var/lib/postgresql/data}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.postgresql.storageClass }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources:
+          requests: {storage: {{ .Values.postgresql.size }}}
+{{- end }}
