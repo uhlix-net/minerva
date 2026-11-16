@@ -1305,6 +1305,9 @@ table.data td:first-child {
   background: var(--bg-sunken);
   margin: 0 0 var(--gap);
 }
+.doc .el-toc {
+  background: transparent;
+}
 .doc .el-toc ul,
 .doc .el-children ul {
   list-style: none;
