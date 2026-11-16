@@ -11,10 +11,11 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
 import { CodeBlockView } from "./CodeBlockView";
+import { PageInfo, pageElements } from "./elements";
 
 export const lowlight = createLowlight(common);
 
-export function buildExtensions(opts: { placeholder?: string } = {}) {
+export function buildExtensions(opts: { placeholder?: string; pageId?: number | null; spaceKey?: string | null } = {}) {
   return [
     StarterKit.configure({
       codeBlock: false,
@@ -34,6 +35,8 @@ export function buildExtensions(opts: { placeholder?: string } = {}) {
     Color,
     Image.configure({ allowBase64: false }),
     Placeholder.configure({ placeholder: opts.placeholder ?? "Start writing, or type markdown like # or - ..." }),
+    ...pageElements,
+    PageInfo.configure({ pageId: opts.pageId ?? null, spaceKey: opts.spaceKey ?? null }),
     Markdown,
   ];
 }

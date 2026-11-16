@@ -19,6 +19,7 @@ jobs:
         with: {node-version: 24, cache: npm}
       - run: npm ci
       - run: npm run typecheck
+      - run: npx tsx web/test/markdown-roundtrip.ts
       - run: npm run build
       - uses: azure/setup-helm@v4
       - run: helm lint charts/minerva --set baseUrl=https://minerva.example.com

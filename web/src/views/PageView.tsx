@@ -169,7 +169,7 @@ export function PageView() {
           </span>
         </div>
 
-        <DocView doc={shown} />
+        <DocView doc={shown} pageId={page.id} spaceKey={page.space_key} />
 
         {page.children.length > 0 && !preview && (
           <div className="child-pages">

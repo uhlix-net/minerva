@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useRef, type ReactNode } from "react";
 import { api } from "../api";
+import { CALLOUT_KINDS, type CalloutKind } from "./elements";
 
 function B({ on, title, onClick, children, disabled }: { on?: boolean; title: string; onClick: () => void; children: ReactNode; disabled?: boolean }) {
   return (
@@ -86,6 +87,20 @@ export function Toolbar({ editor, pageId, right }: { editor: Editor; pageId?: nu
     if (url === null) return;
     if (url === "") c().extendMarkRange("link").unsetLink().run();
     else c().extendMarkRange("link").setLink({ href: url }).run();
+  };
+
+  const insert = (what: string) => {
+    if (what === "toc") c().insertContent({ type: "toc" }).run();
+    else if (what === "children") c().insertContent({ type: "children" }).run();
+    else if (what === "status") c().insertContent({ type: "status", attrs: { color: "blue", text: "In progress" } }).run();
+    else if (what === "expand")
+      c().insertContent({ type: "expand", attrs: { title: "Details" }, content: [{ type: "paragraph" }] }).run();
+    else if (what.startsWith("callout:")) {
+      const kind = what.slice(8) as CalloutKind;
+      // Wrap the current block(s) if possible; otherwise insert an empty panel.
+      if (!(c() as any).setCallout(kind).run())
+        c().insertContent({ type: "callout", attrs: { kind }, content: [{ type: "paragraph" }] }).run();
+    }
   };
 
   const upload = async (f: File) => {
@@ -208,6 +223,22 @@ export function Toolbar({ editor, pageId, right }: { editor: Editor; pageId?: nu
       <B title="Divider" onClick={() => c().setHorizontalRule().run()}>
         <Minus size={16} />
       </B>
+      <select className="insert-menu" value="" onChange={(e) => insert(e.target.value)} aria-label="Insert element" title="Insert element">
+        <option value="" disabled>
+          Insert…
+        </option>
+        <option value="toc">Table of contents</option>
+        <option value="children">Child pages list</option>
+        <option value="expand">Expand section</option>
+        <option value="status">Status label</option>
+        <optgroup label="Panel">
+          {Object.entries(CALLOUT_KINDS).map(([k, v]) => (
+            <option key={k} value={`callout:${k}`}>
+              {v.label} panel
+            </option>
+          ))}
+        </optgroup>
+      </select>
       <span className="grow" />
       {right}
     </div>

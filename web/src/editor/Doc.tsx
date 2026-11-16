@@ -14,8 +14,8 @@ export function contentOf(c: DocContent): { content: any; contentType: "json" | 
 }
 
 /** Read-only rendering of a page, using the same schema as the editor so pages look identical. */
-export function DocView({ doc }: { doc: DocContent }) {
-  const extensions = useMemo(() => buildExtensions(), []);
+export function DocView({ doc, pageId, spaceKey }: { doc: DocContent; pageId?: number; spaceKey?: string }) {
+  const extensions = useMemo(() => buildExtensions({ pageId, spaceKey }), [pageId, spaceKey]);
   const init = contentOf(doc);
   const editor = useEditor({
     extensions,
@@ -32,8 +32,8 @@ export function DocView({ doc }: { doc: DocContent }) {
   return <EditorContent editor={editor} />;
 }
 
-export function useDocEditor(doc: DocContent, onChange?: (e: Editor) => void) {
-  const extensions = useMemo(() => buildExtensions(), []);
+export function useDocEditor(doc: DocContent & { id?: number; space_key?: string }, onChange?: (e: Editor) => void) {
+  const extensions = useMemo(() => buildExtensions({ pageId: doc.id, spaceKey: doc.space_key }), [doc.id, doc.space_key]);
   const init = contentOf(doc);
   return useEditor({
     extensions,

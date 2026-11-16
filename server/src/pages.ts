@@ -4,6 +4,10 @@ import { one, q, tx } from "./db.js";
 export function markdownToText(md: string): string {
   return md
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/\{\{(?:toc|children)\}\}/g, " ")
+    .replace(/\{\{status:[a-z]+:([^}\n]*)\}\}/gi, "$1")
+    .replace(/\[!(?:NOTE|INFO|TIP|IMPORTANT|WARNING|CAUTION|DANGER)\]/gi, " ")
+    .replace(/<\/?(?:details|summary)\b[^>]*>/gi, " ")
     .replace(/`([^`]*)`/g, "$1")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")

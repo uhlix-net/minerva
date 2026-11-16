@@ -11,6 +11,15 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 - **Spaces and page trees** with drag-and-drop reordering, breadcrumbs, child pages.
 - **Editor**: headings, colors, highlight, alignment, lists, task lists, tables, images, code blocks
   with highlighting, Mermaid diagrams. Switch to **Markdown** at any time (`Visual` / `Markdown`).
+- **Page elements** (toolbar *Insert…* menu), each with a markdown form:
+
+  | Element | Markdown |
+  |---|---|
+  | Table of contents (live list of the page's headings) | `{{toc}}` on its own line |
+  | Child pages list | `{{children}}` on its own line |
+  | Panel: note, tip, important, warning, caution | GitHub alerts: `> [!WARNING]` then `> text` lines (`INFO` = note, `DANGER` = caution) |
+  | Expand section (collapsed when reading) | `<details>`, `<summary>Title</summary>`, blank line, body, blank line, `</details>` |
+  | Status label (grey, blue, green, yellow, red, purple) | `{{status:green:Done}}`, also inside table cells |
 - **History**: every publish is a version; view and restore old versions. Optimistic locking stops
   silent overwrites.
 - **Search**: PostgreSQL full-text search with highlighted snippets.
@@ -31,7 +40,7 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 kubectl create namespace minerva
 kubectl -n minerva create secret tls minerva-tls --cert=tls.crt --key=tls.key
 # chart: minerva-<version>.tgz from https://github.com/uhlix-net/minerva/releases
-helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.1.0/minerva-0.1.0.tgz \
+helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.2.0/minerva-0.2.0.tgz \
   --namespace minerva \
   --set baseUrl=https://wiki.example.com \
   --set ingress.tls.secretName=minerva-tls
