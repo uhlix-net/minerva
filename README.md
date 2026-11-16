@@ -40,7 +40,7 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 kubectl create namespace minerva
 kubectl -n minerva create secret tls minerva-tls --cert=tls.crt --key=tls.key
 # chart: minerva-<version>.tgz from https://github.com/uhlix-net/minerva/releases
-helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.2.1/minerva-0.2.1.tgz \
+helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.2.2/minerva-0.2.2.tgz \
   --namespace minerva \
   --set baseUrl=https://wiki.example.com \
   --set ingress.tls.secretName=minerva-tls

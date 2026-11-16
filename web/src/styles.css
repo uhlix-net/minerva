@@ -1302,11 +1302,8 @@ table.data td:first-child {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 8px 14px;
-  background: var(--bg-sunken);
-  margin: 0 0 var(--gap);
-}
-.doc .el-toc {
   background: transparent;
+  margin: 0 0 var(--gap);
 }
 .doc .el-toc ul,
 .doc .el-children ul {
