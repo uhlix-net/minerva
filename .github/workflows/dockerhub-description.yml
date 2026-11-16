@@ -19,5 +19,5 @@ jobs:
           username: uhlix
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: uhlix/minerva
-          short-description: Self-hosted, Confluence-style wiki and knowledge base: rich + markdown editor, SSO, Helm chart
+          short-description: "Self-hosted, Confluence-style wiki and knowledge base: rich + markdown editor, SSO, Helm chart"
           readme-filepath: docs/dockerhub.md
