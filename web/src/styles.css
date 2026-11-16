@@ -1305,6 +1305,10 @@ table.data td:first-child {
   background: transparent;
   margin: 0 0 var(--gap);
 }
+.doc .el-toc {
+  border: 0;
+  padding: 0;
+}
 .doc .el-toc ul,
 .doc .el-children ul {
   list-style: none;
