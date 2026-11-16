@@ -3,7 +3,7 @@ baseUrl: ""
 siteName: Minerva
 
 image:
-  repository: ghcr.io/uhlix-net/minerva
+  repository: docker.io/uhlix/minerva
   tag: ""            # defaults to the chart appVersion
   pullPolicy: IfNotPresent
 imagePullSecrets: []
