@@ -1,0 +1,23 @@
+name: dockerhub-description
+# Sync the Docker Hub repository overview (docs/dockerhub.md) and short description.
+on:
+  push:
+    branches: [main]
+    paths: [docs/dockerhub.md, .github/workflows/dockerhub-description.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: peter-evans/dockerhub-description@v4
+        with:
+          username: uhlix
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: uhlix/minerva
+          short-description: Self-hosted wiki and knowledge base (Confluence-style) with a rich and markdown editor, SSO and Helm chart
+          readme-filepath: docs/dockerhub.md
