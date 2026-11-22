@@ -2,8 +2,8 @@ apiVersion: v2
 name: minerva
 description: Minerva - a modular, self-hosted knowledge base (spaces, pages, word-processor editor with Markdown, themes, SSO).
 type: application
-version: 0.2.5
-appVersion: "0.2.5"
+version: 0.3.0-rc.1
+appVersion: "0.3.0-rc.1"
 home: https://github.com/uhlix-net/minerva
 sources:
   - https://github.com/uhlix-net/minerva

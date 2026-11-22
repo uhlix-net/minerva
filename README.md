@@ -27,7 +27,11 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
   **Page width** (Narrow, Standard, Wide, Full width) and **spacing** (Compact, Comfortable,
   Spacious) per user.
 - **Authentication**: internal accounts (argon2id), OpenID Connect (Authentik, Keycloak, Entra ID, ...),
-  LDAP / Active Directory. Admin rights can follow IdP groups.
+  LDAP / Active Directory. Admin rights can follow IdP groups. Administrators configure OIDC and LDAP in
+  the web UI under **Settings → Authentication** (with a connection test and an LDAP test sign-in);
+  values saved there are stored in the database and override the Helm values / environment.
+- **Help**: **About → Help** shows every markdown option and page element, with the markdown next to
+  the rendered result.
 - **Modules**: auth providers, environment checks and features are modules; third-party modules load
   from `MINERVA_PLUGIN_DIR`.
 - **Install checks**: the Helm chart refuses to install when the StorageClass, TLS secret or referenced
@@ -48,6 +52,7 @@ helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.2
 
 The first start creates the administrator `admin` / `admin` (`admin.*` values). See
 [`charts/minerva/values.yaml`](charts/minerva/values.yaml) for OIDC, LDAP, storage and resources.
+OIDC and LDAP can also be set later in the web UI (*Settings → Authentication*).
 
 ## Development
 

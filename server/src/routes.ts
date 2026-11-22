@@ -7,7 +7,8 @@ import { z } from "zod";
 import { createSession, destroySession, hashPassword, requireAdmin, requireUser, upsertExternalUser, type SessionUser } from "./auth.js";
 import { config } from "./config.js";
 import { one, q, tx } from "./db.js";
-import { authProviders, loaded, runChecks } from "./modules/registry.js";
+import { AUTH_KINDS, authSettingsView, resetAuthSettings, saveAuthSettings, type AuthKind } from "./auth-settings.js";
+import { authProviders, isConfigured, loaded, runChecks } from "./modules/registry.js";
 import type { ModuleContext, PasswordAuthProvider } from "./modules/types.js";
 import { createPage, pageTree, updatePage, VersionConflict } from "./pages.js";
 
@@ -375,11 +376,111 @@ export async function registerRoutes(app: FastifyInstance, ctx: ModuleContext) {
       description: l.module.description,
       kind: l.module.kind,
       enabled: l.enabled,
-      configured: l.configured,
+      configured: isConfigured(l, ctx),
       source: l.source,
       checks: (l.module.checks ?? []).length,
     })),
   );
 
   app.get("/api/admin/checks", { preHandler: requireAdmin }, async () => runChecks(ctx, { withDb: true }));
+
+  // ---- authentication settings (Settings > Authentication) ----------------------------
+  // Group lists: an array, or text with one group per line (LDAP DNs contain commas).
+  const groupList = z
+    .union([z.array(z.string().max(500)).max(100), z.string().max(20000)])
+    .transform((v) => (Array.isArray(v) ? v : v.split(/\r?\n/)).map((s) => s.trim()).filter(Boolean));
+  const url = z.string().trim().max(500);
+  const text = z.string().trim().max(500);
+  const AUTH_SCHEMAS = {
+    oidc: z
+      .object({
+        enabled: z.boolean(),
+        issuer: url.refine((v) => !v || /^https?:\/\//.test(v), "issuer must be an http(s) URL"),
+        clientId: text,
+        clientSecret: z.string().max(500),
+        displayName: text.min(1, "button label required"),
+        scopes: text.min(1, "scopes required"),
+        usernameClaim: text.min(1),
+        groupsClaim: text.min(1),
+        adminGroups: groupList,
+        allowedGroups: groupList,
+      })
+      .partial(),
+    ldap: z
+      .object({
+        enabled: z.boolean(),
+        url: url.refine((v) => !v || /^ldaps?:\/\//.test(v), "URL must start with ldap:// or ldaps://"),
+        bindDn: text,
+        bindPassword: z.string().max(500),
+        userBase: text,
+        userFilter: text.refine((v) => !v || v.includes("{{username}}"), "filter must contain {{username}}"),
+        usernameAttr: text.min(1),
+        displayNameAttr: text.min(1),
+        emailAttr: text.min(1),
+        adminGroups: groupList,
+        allowedGroups: groupList,
+        displayName: text.min(1, "label required"),
+        caFile: text,
+      })
+      .partial(),
+  };
+  const kindOf = (req: unknown) => (req as { params: { kind: string } }).params.kind as AuthKind;
+  const CHECK_ID = { oidc: "oidc-discovery", ldap: "ldap-bind" } as const;
+
+  app.get("/api/admin/auth", { preHandler: requireAdmin }, async () => ({
+    oidc: { ...authSettingsView("oidc"), redirectUri: `${config.baseUrl}/api/auth/oidc/callback` },
+    ldap: authSettingsView("ldap"),
+    modules: Object.fromEntries(
+      AUTH_KINDS.map((k) => {
+        const l = loaded.find((m) => m.module.id === `auth-${k}`);
+        return [k, { loaded: Boolean(l?.enabled), active: l ? isConfigured(l, ctx) : false }];
+      }),
+    ),
+  }));
+
+  app.put("/api/admin/auth/:kind", { preHandler: requireAdmin }, async (req, reply) => {
+    const kind = kindOf(req);
+    if (!AUTH_KINDS.includes(kind)) return bad(reply, "unknown provider", 404);
+    const b = AUTH_SCHEMAS[kind].safeParse(req.body);
+    if (!b.success) return bad(reply, b.error.issues[0].message);
+    await saveAuthSettings(kind, b.data);
+    req.log.info(`auth settings for ${kind} changed by ${user(req).username}`);
+    return authSettingsView(kind);
+  });
+
+  app.delete("/api/admin/auth/:kind", { preHandler: requireAdmin }, async (req, reply) => {
+    const kind = kindOf(req);
+    if (!AUTH_KINDS.includes(kind)) return bad(reply, "unknown provider", 404);
+    await resetAuthSettings(kind);
+    req.log.info(`auth settings for ${kind} reset to environment by ${user(req).username}`);
+    return authSettingsView(kind);
+  });
+
+  /** Connection test with the saved settings; for LDAP, optionally a test sign-in. */
+  app.post("/api/admin/auth/:kind/test", { preHandler: requireAdmin }, async (req, reply) => {
+    const kind = kindOf(req);
+    if (!AUTH_KINDS.includes(kind)) return bad(reply, "unknown provider", 404);
+    const l = loaded.find((m) => m.module.id === `auth-${kind}`);
+    const check = l?.module.checks?.find((c) => c.id === CHECK_ID[kind]);
+    if (!l?.enabled || !check) return { status: "fail", detail: `Module auth-${kind} is not loaded (MINERVA_MODULES).` };
+    let result;
+    try {
+      result = await check.run(ctx);
+    } catch (e) {
+      result = { status: "fail", detail: (e as Error).message };
+    }
+    const b = z.object({ username: z.string().min(1), password: z.string().min(1) }).safeParse(req.body);
+    if (kind === "ldap" && b.success && result.status === "ok") {
+      const p = l.module.authProvider!(ctx) as PasswordAuthProvider;
+      try {
+        const id = await p.authenticate(b.data.username, b.data.password);
+        result = id
+          ? { status: "ok", detail: `${result.detail} Signed in as ${id.username} (${id.displayName})${id.isAdmin ? ", admin" : ""}.` }
+          : { status: "fail", detail: `${result.detail} Sign-in failed: wrong password, user not found, or not in an allowed group.` };
+      } catch (e) {
+        result = { status: "fail", detail: `Sign-in error: ${(e as Error).message}` };
+      }
+    }
+    return result;
+  });
 }

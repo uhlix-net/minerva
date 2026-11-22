@@ -366,6 +366,14 @@ label.field > span {
 .topbar .btn.subtle:hover {
   background: color-mix(in srgb, var(--topbar-text, var(--text)) 12%, transparent);
 }
+.topnav {
+  display: flex;
+  gap: 2px;
+}
+.topbar .topnav .btn.on {
+  background: color-mix(in srgb, var(--topbar-text, var(--text)) 16%, transparent);
+  font-weight: 700;
+}
 .brand {
   display: flex;
   align-items: center;
@@ -1464,4 +1472,131 @@ table.data td:first-child {
 }
 .el-swatches .el-status {
   cursor: pointer;
+}
+
+/* ===== Settings > Authentication ===================================================== */
+.auth-card {
+  margin-bottom: 20px;
+}
+.auth-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.auth-head h3 {
+  margin: 0 8px 0 0;
+}
+.auth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0 16px;
+  margin-top: 12px;
+}
+.auth-grid .field.wide {
+  grid-column: 1 / -1;
+}
+.auth-grid .field small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.8em;
+}
+.auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.auth-actions .spacer {
+  flex: 1;
+}
+.auth-test-input {
+  width: 170px;
+}
+.auth-note {
+  font-size: 0.9em;
+  margin: 8px 0;
+}
+.auth-test {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  font-size: 0.9em;
+}
+.auth-test.ok {
+  color: var(--success);
+}
+.auth-test.fail {
+  color: var(--danger);
+}
+label.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 4px 0;
+}
+
+/* ===== About / Help ================================================================== */
+.help-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 20px;
+}
+.help-section {
+  margin-bottom: 28px;
+}
+.help-section > h2 {
+  margin: 0 0 6px;
+  font-size: 1.3em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.help-example {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+.help-example > div {
+  min-width: 0;
+}
+.help-example .help-label {
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-subtlest);
+  margin-bottom: 4px;
+}
+.help-example pre.help-src {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85em;
+  white-space: pre;
+}
+.help-example .help-out {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.help-example .help-out .doc {
+  min-height: 0;
+}
+.help-example .help-out .doc > :first-child {
+  margin-top: 0;
+}
+@media (max-width: 800px) {
+  .help-example {
+    grid-template-columns: 1fr;
+  }
+}
+.help-example .help-out .doc > :last-child {
+  margin-bottom: 0;
 }

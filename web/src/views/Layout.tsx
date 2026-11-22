@@ -1,6 +1,6 @@
-import { Check, ChevronDown, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings, Shield } from "lucide-react";
+import { Check, ChevronDown, Info, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings, Shield } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate, useParams } from "react-router";
+import { Link, NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router";
 import { useSession } from "../App";
 import { api, pageUrl } from "../api";
 import { DENSITIES, THEMES, usePrefs, WIDTHS } from "../prefs";
@@ -159,9 +159,17 @@ export function Layout() {
           <img src="/minerva-mark.svg" alt="" />
           <span className="hide-sm">{meta?.siteName ?? "Minerva"}</span>
         </Link>
-        <Link to="/spaces" className="btn subtle">
-          <LayoutGrid size={16} /> <span className="hide-sm">Spaces</span>
-        </Link>
+        <nav className="topnav" aria-label="Main">
+          <NavLink to="/spaces" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
+            <LayoutGrid size={16} /> <span className="hide-sm">Spaces</span>
+          </NavLink>
+          <NavLink to="/settings" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
+            <Settings size={16} /> <span className="hide-sm">Settings</span>
+          </NavLink>
+          <NavLink to="/about" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
+            <Info size={16} /> <span className="hide-sm">About</span>
+          </NavLink>
+        </nav>
         <CreateButton />
         <span className="spacer" />
         <form

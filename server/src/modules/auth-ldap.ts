@@ -18,7 +18,7 @@ const mod: MinervaModule = {
   name: "LDAP / Active Directory",
   description: "Sign in with directory credentials (search with a service account, then bind as the user).",
   kind: "auth",
-  configured: (ctx) => Boolean(ctx.config.ldap.url && ctx.config.ldap.userBase),
+  configured: (ctx) => Boolean(ctx.config.ldap.enabled && ctx.config.ldap.url && ctx.config.ldap.userBase),
   authProvider: (ctx) => ({
     id: "ldap",
     type: "password",
@@ -69,7 +69,8 @@ const mod: MinervaModule = {
       needsDb: false,
       async run(ctx) {
         const l = ctx.config.ldap;
-        if (!l.url) return { status: "skip", detail: "LDAP_URL not set." };
+        if (!l.enabled) return { status: "skip", detail: "LDAP is turned off." };
+        if (!l.url) return { status: "skip", detail: "No server URL set." };
         const c = newClient(ctx);
         try {
           await c.bind(l.bindDn, l.bindPassword);

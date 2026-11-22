@@ -17,7 +17,7 @@ COPY web/package.json web/
 RUN npm ci --omit=dev --workspace server --ignore-scripts
 
 FROM docker.io/library/node:24-alpine
-ARG VERSION=0.2.5
+ARG VERSION=0.3.0-rc.1
 LABEL org.opencontainers.image.title="Minerva" \
       org.opencontainers.image.description="Modular, self-hosted knowledge base" \
       org.opencontainers.image.source="https://github.com/uhlix-net/minerva" \

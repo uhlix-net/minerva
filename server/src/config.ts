@@ -38,6 +38,7 @@ export const config = {
   pluginDir: env("MINERVA_PLUGIN_DIR", ""),
   tlsCertFile: env("MINERVA_TLS_CERT_FILE", ""),
   oidc: {
+    enabled: env("OIDC_ENABLED", "true") !== "false",
     issuer: env("OIDC_ISSUER"),
     clientId: env("OIDC_CLIENT_ID"),
     clientSecret: env("OIDC_CLIENT_SECRET"),
@@ -49,6 +50,7 @@ export const config = {
     allowedGroups: list(env("OIDC_ALLOWED_GROUPS")),
   },
   ldap: {
+    enabled: env("LDAP_ENABLED", "true") !== "false",
     url: env("LDAP_URL"),
     bindDn: env("LDAP_BIND_DN"),
     bindPassword: env("LDAP_BIND_PASSWORD"),

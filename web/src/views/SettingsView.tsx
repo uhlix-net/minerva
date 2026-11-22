@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { useSession } from "../App";
 import { api } from "../api";
+import { useSearchParams } from "react-router";
 import { DENSITIES, THEMES, usePrefs, WIDTHS } from "../prefs";
+import { AuthSettings } from "./AuthSettings";
 
 export function SettingsView() {
   const { me } = useSession();
@@ -9,6 +11,8 @@ export function SettingsView() {
   const [cur, setCur] = useState("");
   const [next, setNext] = useState("");
   const [msg, setMsg] = useState("");
+  const [params, setParams] = useSearchParams();
+  const tab = me?.is_admin && params.get("tab") === "auth" ? "auth" : "prefs";
 
   const changePw = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,6 +29,20 @@ export function SettingsView() {
   return (
     <div className="dash" style={{ maxWidth: 900 }}>
       <h1 style={{ marginTop: 0 }}>Settings</h1>
+      {me?.is_admin && (
+        <div className="tabs">
+          <button className={tab === "prefs" ? "on" : ""} onClick={() => setParams({})}>
+            Preferences
+          </button>
+          <button className={tab === "auth" ? "on" : ""} onClick={() => setParams({ tab: "auth" })}>
+            Authentication
+          </button>
+        </div>
+      )}
+      {tab === "auth" ? (
+        <AuthSettings />
+      ) : (
+        <>
 
       <div className="section-title">Theme</div>
       <div className="choice-grid">
@@ -94,6 +112,8 @@ export function SettingsView() {
           <p className="muted">Your password is managed by your identity provider ({me?.auth_source.toUpperCase()}).</p>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

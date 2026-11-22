@@ -13,9 +13,12 @@ const BUILTIN: MinervaModule[] = [authLocal, authOidc, authLdap, checksCore, mar
 export interface LoadedModule {
   module: MinervaModule;
   enabled: boolean;
+  /** At load time; use isConfigured() for the live value (auth settings can change at runtime). */
   configured: boolean;
   source: "builtin" | "plugin";
 }
+
+export const isConfigured = (l: LoadedModule, ctx: ModuleContext) => l.enabled && (l.module.configured ? l.module.configured(ctx) : true);
 
 export const loaded: LoadedModule[] = [];
 
@@ -44,11 +47,13 @@ export async function loadModules(ctx: ModuleContext) {
 }
 
 export async function registerModules(ctx: ModuleContext) {
-  for (const l of loaded) if (l.enabled && l.configured && l.module.register) await l.module.register(ctx);
+  // Register every enabled module, configured or not: a module configured later in the UI then
+  // works without a restart (its routes check the live configuration).
+  for (const l of loaded) if (l.enabled && l.module.register) await l.module.register(ctx);
 }
 
 export function authProviders(ctx: ModuleContext): AuthProvider[] {
-  return loaded.filter((l) => l.enabled && l.configured && l.module.authProvider).map((l) => l.module.authProvider!(ctx));
+  return loaded.filter((l) => isConfigured(l, ctx) && l.module.authProvider).map((l) => l.module.authProvider!(ctx));
 }
 
 export interface CheckReport extends CheckResult {

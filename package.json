@@ -1,7 +1,7 @@
 {
   "name": "minerva",
   "private": true,
-  "version": "0.2.5",
+  "version": "0.3.0-rc.1",
   "description": "Minerva - a modular, self-hosted knowledge base",
   "workspaces": ["server", "web"],
   "scripts": {

@@ -1,7 +1,14 @@
 import * as client from "openid-client";
+import { onAuthSettingsChange } from "../auth-settings.js";
 import type { MinervaModule, ModuleContext } from "./types.js";
 
 let discovered: client.Configuration | undefined;
+// Settings can change at runtime (Settings > Authentication): discover again on next use.
+onAuthSettingsChange(() => {
+  discovered = undefined;
+});
+
+const isConfigured = (ctx: ModuleContext) => Boolean(ctx.config.oidc.enabled && ctx.config.oidc.issuer && ctx.config.oidc.clientId);
 
 async function oidcConfig(ctx: ModuleContext) {
   if (!discovered) {
@@ -19,7 +26,7 @@ const mod: MinervaModule = {
   name: "OpenID Connect SSO",
   description: "Single sign-on through any OpenID Connect provider (Authentik, Keycloak, Entra ID, ...).",
   kind: "auth",
-  configured: (ctx) => Boolean(ctx.config.oidc.issuer && ctx.config.oidc.clientId),
+  configured: isConfigured,
   authProvider: (ctx) => ({
     id: "oidc",
     type: "redirect",
@@ -31,6 +38,7 @@ const mod: MinervaModule = {
     const o = ctx.config.oidc;
 
     app.get("/api/auth/oidc/login", async (req, reply) => {
+      if (!isConfigured(ctx)) return reply.redirect("/login?error=sso_failed");
       const cfg = await oidcConfig(ctx);
       const verifier = client.randomPKCECodeVerifier();
       const state = client.randomState();
@@ -55,6 +63,7 @@ const mod: MinervaModule = {
     });
 
     app.get("/api/auth/oidc/callback", async (req, reply) => {
+      if (!isConfigured(ctx)) return reply.redirect("/login?error=sso_failed");
       const raw = req.cookies[COOKIE];
       const unsigned = raw ? req.unsignCookie(raw) : undefined;
       if (!unsigned?.valid || !unsigned.value) return reply.redirect("/login?error=sso_state");
@@ -105,7 +114,8 @@ const mod: MinervaModule = {
       needsDb: false,
       async run(ctx) {
         const o = ctx.config.oidc;
-        if (!o.issuer) return { status: "skip", detail: "OIDC_ISSUER not set." };
+        if (!o.enabled) return { status: "skip", detail: "OIDC is turned off." };
+        if (!o.issuer) return { status: "skip", detail: "No issuer URL set." };
         if (!o.clientId || !o.clientSecret) return { status: "fail", detail: "OIDC client ID or secret missing." };
         try {
           const url = new URL(".well-known/openid-configuration", o.issuer.endsWith("/") ? o.issuer : o.issuer + "/");
