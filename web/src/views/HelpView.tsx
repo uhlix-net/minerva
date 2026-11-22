@@ -122,7 +122,7 @@ const SECTIONS: { id: string; title: string; body: ReactNode }[] = [
     title: "Tables",
     body: (
       <>
-        <Example md={"| Server | Role | Status |\n|---|---|---|\n| lxprgr02 | Mail relay | {{status:green:Up}} |\n| wnprgr11 | Domain controller | {{status:yellow:Patching}} |"} />
+        <Example md={"| Server | Role | Status |\n|---|---|---|\n| web01 | Web server | {{status:green:Up}} |\n| dc01 | Domain controller | {{status:yellow:Patching}} |"} />
         <p className="muted">
           The first row is the header; the second row of dashes is required. Columns don't need to line up. In the visual editor, the Table button inserts a
           table and the table toolbar adds or deletes rows and columns.

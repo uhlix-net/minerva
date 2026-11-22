@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Package charts/minerva and print a k3s HelmChart manifest that embeds it (spec.chartContent),
-# with the given values file. Usage: deploy/k3s-helmchart.sh deploy/uhlix-values.yaml > minerva.yaml
+# with the given values file. Usage: deploy/k3s-helmchart.sh my-values.yaml > minerva.yaml
 set -euo pipefail
 cd "$(dirname "$0")/.."
 values=${1:?values file}

@@ -71,3 +71,7 @@ Layout: `server/` (Fastify, TypeScript), `web/` (React, TipTap), `charts/minerva
 A module is an ES module whose default export is a `MinervaModule` (see
 [`server/src/modules/types.ts`](server/src/modules/types.ts)): an id, a kind (`auth`, `checks`,
 `feature`), and any of `authProvider()`, `checks[]`, `register(ctx)` (add API routes).
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).

@@ -10,3 +10,5 @@ sources:
 icon: https://raw.githubusercontent.com/uhlix-net/minerva/main/assets/minerva-mark.svg
 keywords: [wiki, knowledge-base, documentation, confluence-alternative]
 kubeVersion: ">=1.27.0-0"
+annotations:
+  artifacthub.io/license: Apache-2.0

@@ -1,6 +1,7 @@
 {
   "name": "minerva",
   "private": true,
+  "license": "Apache-2.0",
   "version": "0.3.0",
   "description": "Minerva - a modular, self-hosted knowledge base",
   "workspaces": ["server", "web"],

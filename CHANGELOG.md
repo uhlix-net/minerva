@@ -2,6 +2,12 @@
 
 All notable changes to Minerva. Versions follow [semantic versioning](https://semver.org/).
 
+## Unreleased
+- Published as open source under the Apache License 2.0 (`LICENSE`).
+- The site-specific Helm values file is no longer in the repository; pass your own values file to
+  `deploy/k3s-helmchart.sh`.
+- User Guide table example uses generic server names.
+
 ## 0.3.0 (2026-11-22)
 
 ### Added
