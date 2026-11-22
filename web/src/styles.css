@@ -1309,13 +1309,15 @@ table.data td:first-child {
   border: 0;
   padding: 0;
 }
-/* "Table of Contents" title: same font as a page H1 */
+/* "Table of Contents" title: same font as a page H2 */
 .doc .el-toc-title {
-  font-size: 1.7em;
+  font-size: 1.4em;
   font-weight: 700;
   line-height: 1.25;
   color: var(--text);
   margin: 0 0 0.4em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
 }
 .doc .el-toc ul,
 .doc .el-children ul {
