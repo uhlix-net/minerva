@@ -17,7 +17,7 @@
  */
 import { Extension, Node, mergeAttributes, type JSONContent } from "@tiptap/core";
 import { NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer, type NodeViewProps } from "@tiptap/react";
-import { AlertOctagon, AlertTriangle, ChevronRight, FileText, Info, Lightbulb, ListTree, MessageSquareWarning } from "lucide-react";
+import { AlertOctagon, AlertTriangle, ChevronRight, FileText, Info, Lightbulb, MessageSquareWarning } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { api, pageUrl } from "../api";
@@ -101,9 +101,7 @@ function TocView({ editor }: NodeViewProps) {
   };
   return (
     <NodeViewWrapper className="el-toc" contentEditable={false} data-type="toc">
-      <div className="el-head">
-        <ListTree size={15} /> Contents
-      </div>
+      <div className="el-toc-title">Table of Contents</div>
       {items.length === 0 ? (
         <div className="muted">Headings on this page will be listed here.</div>
       ) : (

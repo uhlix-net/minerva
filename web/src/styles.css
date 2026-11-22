@@ -1309,6 +1309,14 @@ table.data td:first-child {
   border: 0;
   padding: 0;
 }
+/* "Table of Contents" title: same font as a page H1 */
+.doc .el-toc-title {
+  font-size: 1.7em;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+  margin: 0 0 0.4em;
+}
 .doc .el-toc ul,
 .doc .el-children ul {
   list-style: none;
