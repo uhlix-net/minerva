@@ -618,7 +618,9 @@ label.field > span {
   align-items: center;
   gap: 6px;
   min-height: 40px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  /* clear space under the bar, so scrolled content never runs right up against it */
+  padding-bottom: 12px;
   /* start where it sticks: cover .page-wrap's top padding, so the bar never slides up before sticking */
   margin-top: -24px;
   padding-top: 24px;

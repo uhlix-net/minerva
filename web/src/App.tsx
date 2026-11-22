@@ -11,7 +11,7 @@ import { PageView } from "./views/PageView";
 import { PageEdit } from "./views/PageEdit";
 import { SearchView } from "./views/SearchView";
 import { SettingsView } from "./views/SettingsView";
-import { HelpView, UserGuideView } from "./views/HelpView";
+import { HelpView } from "./views/HelpView";
 
 interface Session {
   me: Me | null;
@@ -66,7 +66,7 @@ export function App() {
               <Route path="/search" element={<SearchView />} />
               <Route path="/settings" element={<SettingsView />} />
               <Route path="/help" element={<HelpView />} />
-              <Route path="/guide" element={<UserGuideView />} />
+              <Route path="/guide" element={<Navigate to="/help?tab=guide" replace />} />
               <Route path="/about" element={<Navigate to="/help" replace />} />
               <Route path="/admin" element={<Navigate to="/settings?tab=status" replace />} />
               <Route path="*" element={<div className="dash">Page not found.</div>} />

@@ -1,4 +1,4 @@
-import { BookOpen, Check, ChevronDown, CircleHelp, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings } from "lucide-react";
+import { Check, ChevronDown, CircleHelp, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router";
 import { useSession } from "../App";
@@ -179,9 +179,6 @@ export function Layout() {
         <nav className="topnav" aria-label="Settings and help">
           <NavLink to="/settings" className={navCls}>
             <Settings size={16} /> <span className="hide-sm">Settings</span>
-          </NavLink>
-          <NavLink to="/guide" className={navCls}>
-            <BookOpen size={16} /> <span className="hide-sm">User Guide</span>
           </NavLink>
           <NavLink to="/help" className={navCls}>
             <CircleHelp size={16} /> <span className="hide-sm">Help</span>

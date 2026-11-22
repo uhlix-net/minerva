@@ -278,14 +278,17 @@ function About() {
         </li>
       </ul>
       <p>
-        New to writing pages? The <Link to="/guide">User Guide</Link> shows all the markdown options and page elements.
+        New to writing pages? The <Link to="/help?tab=guide">User Guide</Link> tab shows all the markdown options and page elements.
       </p>
     </>
   );
 }
 
 /** Help: one tab per topic (?tab=...); About is the first and default. Add new tabs to HELP_TABS. */
-const HELP_TABS: { id: string; label: string; view: () => ReactNode }[] = [{ id: "about", label: "About", view: () => <About /> }];
+const HELP_TABS: { id: string; label: string; view: () => ReactNode }[] = [
+  { id: "about", label: "About", view: () => <About /> },
+  { id: "guide", label: "User Guide", view: () => <UserGuide /> },
+];
 
 export function HelpView() {
   const [params, setParams] = useSearchParams();
@@ -305,11 +308,3 @@ export function HelpView() {
   );
 }
 
-export function UserGuideView() {
-  return (
-    <div className="dash" style={{ maxWidth: 1100 }}>
-      <h1 style={{ marginTop: 0 }}>User Guide</h1>
-      <UserGuide />
-    </div>
-  );
-}

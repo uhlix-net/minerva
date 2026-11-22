@@ -10,11 +10,13 @@ All notable changes to Minerva. Versions follow [semantic versioning](https://se
 - New logo: the Minerva portrait cropped to a circle (`assets/minerva-mark.png`, full artwork `assets/minerva-portrait.jpg`),
   used for the app icon, sign-in page, top bar and Helm chart icon.
 - Rosewood theme, sign-in page and avatars recoloured to match the logo: deeper purple, wine red and amber gold.
-- **Help** now has tabs; the existing content is the **About** tab, ready for more topics.
+- **Help** now has tabs: **About** (the existing content) and **User Guide**, which moved off the top bar
+  (`/guide` redirects to it).
 
 ### Fixed
 - The breadcrumb bar no longer slides up before it sticks when you follow a link further down the page, and the
   window itself never scrolls (only the page area does), so the top bar stays put.
+- A small gap under the breadcrumb bar keeps scrolled page content from running right up against it.
 
 ## 0.3.0 (2026-11-22)
 
