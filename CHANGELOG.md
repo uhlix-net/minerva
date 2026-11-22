@@ -2,16 +2,16 @@
 
 All notable changes to Minerva. Versions follow [semantic versioning](https://semver.org/).
 
-## Unreleased
+## 0.3.1 (2026-11-22)
+
+### Changed
+- **New logo**: the Minerva portrait cropped to a circle (`assets/minerva-mark.png`, full artwork
+  `assets/minerva-portrait.jpg`), used for the app icon, top bar, sign-in page, Help page and Helm chart icon.
+- **Rosewood** theme, sign-in page and avatars recoloured to match the logo: deeper purple, wine red and amber gold.
+- **Help** now has tabs: **About** and **User Guide**. The User Guide moved off the top bar; `/guide` redirects to it.
 - Published as open source under the Apache License 2.0 (`LICENSE`).
 - The site-specific Helm values file is no longer in the repository; pass your own values file to
-  `deploy/k3s-helmchart.sh`.
-- User Guide table example uses generic server names.
-- New logo: the Minerva portrait cropped to a circle (`assets/minerva-mark.png`, full artwork `assets/minerva-portrait.jpg`),
-  used for the app icon, sign-in page, top bar and Helm chart icon.
-- Rosewood theme, sign-in page and avatars recoloured to match the logo: deeper purple, wine red and amber gold.
-- **Help** now has tabs: **About** (the existing content) and **User Guide**, which moved off the top bar
-  (`/guide` redirects to it).
+  `deploy/k3s-helmchart.sh`. The User Guide table example uses generic server names.
 
 ### Fixed
 - The breadcrumb bar no longer slides up before it sticks when you follow a link further down the page, and the

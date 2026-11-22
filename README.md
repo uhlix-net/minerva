@@ -30,7 +30,7 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
   LDAP / Active Directory. Admin rights can follow IdP groups. Administrators configure OIDC and LDAP in
   the web UI under **Settings → Authentication** (with a connection test and an LDAP test sign-in);
   values saved there are stored in the database and override the Helm values / environment.
-- **User Guide** (top bar) shows every markdown option and page element, with the markdown next to
+- **Help → User Guide** shows every markdown option and page element, with the markdown next to
   the rendered result.
 - **Modules**: auth providers, environment checks and features are modules; third-party modules load
   from `MINERVA_PLUGIN_DIR`.
@@ -44,7 +44,7 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 kubectl create namespace minerva
 kubectl -n minerva create secret tls minerva-tls --cert=tls.crt --key=tls.key
 # chart: minerva-<version>.tgz from https://github.com/uhlix-net/minerva/releases
-helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.3.0/minerva-0.3.0.tgz \
+helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.3.1/minerva-0.3.1.tgz \
   --namespace minerva \
   --set baseUrl=https://wiki.example.com \
   --set ingress.tls.secretName=minerva-tls
