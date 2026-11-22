@@ -229,6 +229,7 @@ function ProviderForm<T extends OidcSettings | LdapSettings>(props: {
 export function AuthSettings() {
   const [state, setState] = useState<AuthState | null>(null);
   const [err, setErr] = useState("");
+  const [kind, setKind] = useState<"oidc" | "ldap">("oidc");
   const load = () =>
     api
       .get<AuthState>("/api/admin/auth")
@@ -246,28 +247,41 @@ export function AuthSettings() {
         environment (Helm values and secrets); saving here stores them in the Minerva database, where they override the environment. Secrets are never shown
         again after saving.
       </p>
-      <ProviderForm
-        kind="oidc"
-        title="OpenID Connect (SSO)"
-        intro="Single sign-on through Authentik, Keycloak, Entra ID or any OpenID Connect provider. Users get a sign-in button on the login page."
-        value={state.oidc}
-        active={state.modules.oidc.active}
-        moduleLoaded={state.modules.oidc.loaded}
-        fields={OIDC_FIELDS}
-        secretLabel="Client secret"
-        onSaved={load}
-      />
-      <ProviderForm
-        kind="ldap"
-        title="LDAP / Active Directory"
-        intro="Users sign in on the normal form with their directory username and password. Minerva searches with the service account, then binds as the user."
-        value={state.ldap}
-        active={state.modules.ldap.active}
-        moduleLoaded={state.modules.ldap.loaded}
-        fields={LDAP_FIELDS}
-        secretLabel="Service account password"
-        onSaved={load}
-      />
+      <div className="tabs subtabs">
+        <button className={kind === "oidc" ? "on" : ""} onClick={() => setKind("oidc")}>
+          OpenID Connect
+        </button>
+        <button className={kind === "ldap" ? "on" : ""} onClick={() => setKind("ldap")}>
+          LDAP / Active Directory
+        </button>
+      </div>
+      {kind === "oidc" ? (
+        <ProviderForm
+          key="oidc"
+          kind="oidc"
+          title="OpenID Connect (SSO)"
+          intro="Single sign-on through Authentik, Keycloak, Entra ID or any OpenID Connect provider. Users get a sign-in button on the login page."
+          value={state.oidc}
+          active={state.modules.oidc.active}
+          moduleLoaded={state.modules.oidc.loaded}
+          fields={OIDC_FIELDS}
+          secretLabel="Client secret"
+          onSaved={load}
+        />
+      ) : (
+        <ProviderForm
+          key="ldap"
+          kind="ldap"
+          title="LDAP / Active Directory"
+          intro="Users sign in on the normal form with their directory username and password. Minerva searches with the service account, then binds as the user."
+          value={state.ldap}
+          active={state.modules.ldap.active}
+          moduleLoaded={state.modules.ldap.loaded}
+          fields={LDAP_FIELDS}
+          secretLabel="Service account password"
+          onSaved={load}
+        />
+      )}
     </>
   );
 }

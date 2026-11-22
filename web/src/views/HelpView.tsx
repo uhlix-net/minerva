@@ -38,7 +38,7 @@ const SECTIONS: { id: string; title: string; body: ReactNode }[] = [
           </li>
           <li>
             The editor has two views: <strong>Visual</strong> (word processor, with a toolbar) and <strong>Markdown</strong> (the source). Switch at any time;
-            the page is the same. Your default view is under Settings &gt; Preferences.
+            the page is the same. Your default view is under Preferences (account menu, top right).
           </li>
           <li>
             In the visual view you can type markdown shortcuts and they turn into formatting as you type: <code># </code> for a heading, <code>- </code> for a
@@ -263,7 +263,7 @@ function About() {
           <strong>Pages</strong> are written in a visual editor or as markdown, keep a full version history, and are searchable (top bar).
         </li>
         <li>
-          <strong>Appearance</strong> (palette icon): theme, page width and spacing, saved per user.
+          <strong>Appearance</strong> (palette icon) and <strong>Preferences</strong> (account menu): theme, page width, spacing and default editor, saved per user.
         </li>
         <li>
           <strong>Sign-in methods</strong> on this site: Minerva accounts

@@ -1,20 +1,44 @@
 import { useState, type FormEvent } from "react";
 import { useSession } from "../App";
 import { api } from "../api";
-import { useSearchParams } from "react-router";
+import { Navigate, useSearchParams } from "react-router";
 import { DENSITIES, THEMES, usePrefs, WIDTHS } from "../prefs";
 import { SystemStatus, Users } from "./SystemStatus";
 import { AuthSettings } from "./AuthSettings";
 
+/** Settings (administrators): Users, Authentication, System Status. Personal preferences are under /preferences. */
 export function SettingsView() {
+  const { me } = useSession();
+  const [params, setParams] = useSearchParams();
+  if (!me?.is_admin) return <Navigate to="/preferences" replace />;
+  const asked = params.get("tab");
+  const tab = asked === "auth" || asked === "status" ? asked : "users";
+  return (
+    <div className="dash" style={{ maxWidth: 1100 }}>
+      <h1 style={{ marginTop: 0 }}>Settings</h1>
+      <div className="tabs">
+        <button className={tab === "users" ? "on" : ""} onClick={() => setParams({})}>
+          Users
+        </button>
+        <button className={tab === "auth" ? "on" : ""} onClick={() => setParams({ tab: "auth" })}>
+          Authentication
+        </button>
+        <button className={tab === "status" ? "on" : ""} onClick={() => setParams({ tab: "status" })}>
+          System Status
+        </button>
+      </div>
+      {tab === "auth" ? <AuthSettings /> : tab === "status" ? <SystemStatus /> : <Users />}
+    </div>
+  );
+}
+
+/** Preferences (every user, from the account menu): theme, page width, spacing, editor, password. */
+export function PreferencesView() {
   const { me } = useSession();
   const { prefs, setPrefs } = usePrefs();
   const [cur, setCur] = useState("");
   const [next, setNext] = useState("");
   const [msg, setMsg] = useState("");
-  const [params, setParams] = useSearchParams();
-  const asked = params.get("tab");
-  const tab = me?.is_admin && (asked === "auth" || asked === "users" || asked === "status") ? asked : "prefs";
 
   const changePw = async (e: FormEvent) => {
     e.preventDefault();
@@ -29,33 +53,8 @@ export function SettingsView() {
   };
 
   return (
-    <div className="dash" style={{ maxWidth: tab === "prefs" ? 900 : 1100 }}>
-      <h1 style={{ marginTop: 0 }}>Settings</h1>
-      {me?.is_admin && (
-        <div className="tabs">
-          <button className={tab === "prefs" ? "on" : ""} onClick={() => setParams({})}>
-            Preferences
-          </button>
-          <button className={tab === "auth" ? "on" : ""} onClick={() => setParams({ tab: "auth" })}>
-            Authentication
-          </button>
-          <button className={tab === "users" ? "on" : ""} onClick={() => setParams({ tab: "users" })}>
-            Users
-          </button>
-          <button className={tab === "status" ? "on" : ""} onClick={() => setParams({ tab: "status" })}>
-            System Status
-          </button>
-        </div>
-      )}
-      {tab === "auth" ? (
-        <AuthSettings />
-      ) : tab === "users" ? (
-        <Users />
-      ) : tab === "status" ? (
-        <SystemStatus />
-      ) : (
-        <>
-
+    <div className="dash" style={{ maxWidth: 1100 }}>
+      <h1 style={{ marginTop: 0 }}>Preferences</h1>
       <div className="section-title">Theme</div>
       <div className="choice-grid">
         {THEMES.map((t) => (
@@ -124,8 +123,6 @@ export function SettingsView() {
           <p className="muted">Your password is managed by your identity provider ({me?.auth_source.toUpperCase()}).</p>
         )}
       </div>
-        </>
-      )}
     </div>
   );
 }

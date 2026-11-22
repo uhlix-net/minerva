@@ -2,6 +2,16 @@
 
 All notable changes to Minerva. Versions follow [semantic versioning](https://semver.org/).
 
+## Unreleased
+
+### Changed
+- **Preferences** (theme, page width, spacing, default editor, password) moved out of Settings to its own page,
+  opened from the account menu (top right), where the *Settings* link is renamed **Preferences** (`/preferences`).
+  It now uses the same width as the other settings pages.
+- **Settings** is for administrators only, with tabs **Users**, **Authentication** and **System Status**; the top-bar
+  link is hidden for other users.
+- **Settings → Authentication** puts OpenID Connect and LDAP / Active Directory on separate tabs.
+
 ## 0.3.1 (2026-11-22)
 
 ### Changed

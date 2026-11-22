@@ -1,4 +1,4 @@
-import { Check, ChevronDown, CircleHelp, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings } from "lucide-react";
+import { Check, ChevronDown, CircleHelp, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings, SlidersHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router";
 import { useSession } from "../App";
@@ -96,8 +96,8 @@ function UserMenu() {
             </div>
           </div>
           <hr />
-          <Link className="item" to="/settings">
-            <Settings size={16} /> Settings
+          <Link className="item" to="/preferences">
+            <SlidersHorizontal size={16} /> Preferences
           </Link>
           <hr />
           <button className="item" onClick={logout}>
@@ -134,7 +134,7 @@ function CreateButton() {
 const navCls = ({ isActive }: { isActive: boolean }) => `btn subtle${isActive ? " on" : ""}`;
 
 export function Layout() {
-  const { meta } = useSession();
+  const { meta, me } = useSession();
   const { key } = useParams();
   const nav = useNavigate();
   const loc = useLocation();
@@ -177,9 +177,11 @@ export function Layout() {
         </form>
         <span className="spacer" />
         <nav className="topnav" aria-label="Settings and help">
-          <NavLink to="/settings" className={navCls}>
-            <Settings size={16} /> <span className="hide-sm">Settings</span>
-          </NavLink>
+          {me?.is_admin && (
+            <NavLink to="/settings" className={navCls}>
+              <Settings size={16} /> <span className="hide-sm">Settings</span>
+            </NavLink>
+          )}
           <NavLink to="/help" className={navCls}>
             <CircleHelp size={16} /> <span className="hide-sm">Help</span>
           </NavLink>

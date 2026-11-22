@@ -10,7 +10,7 @@ import { SpaceHome } from "./views/SpaceHome";
 import { PageView } from "./views/PageView";
 import { PageEdit } from "./views/PageEdit";
 import { SearchView } from "./views/SearchView";
-import { SettingsView } from "./views/SettingsView";
+import { PreferencesView, SettingsView } from "./views/SettingsView";
 import { HelpView } from "./views/HelpView";
 
 interface Session {
@@ -65,6 +65,7 @@ export function App() {
               <Route path="/s/:key/p/:id/edit" element={<PageEdit />} />
               <Route path="/search" element={<SearchView />} />
               <Route path="/settings" element={<SettingsView />} />
+              <Route path="/preferences" element={<PreferencesView />} />
               <Route path="/help" element={<HelpView />} />
               <Route path="/guide" element={<Navigate to="/help?tab=guide" replace />} />
               <Route path="/about" element={<Navigate to="/help" replace />} />
