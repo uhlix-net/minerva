@@ -7,7 +7,7 @@ All notable changes to Minerva. Versions follow [semantic versioning](https://se
 - The site-specific Helm values file is no longer in the repository; pass your own values file to
   `deploy/k3s-helmchart.sh`.
 - User Guide table example uses generic server names.
-- New logo: the Minerva portrait in a gold oval (`assets/minerva-mark.png`, full artwork `assets/minerva-portrait.jpg`),
+- New logo: the Minerva portrait cropped to a circle (`assets/minerva-mark.png`, full artwork `assets/minerva-portrait.jpg`),
   used for the app icon, sign-in page, top bar and Helm chart icon.
 - Rosewood theme, sign-in page and avatars recoloured to match the logo: deeper purple, wine red and amber gold.
 - **Help** now has tabs; the existing content is the **About** tab, ready for more topics.
