@@ -4,6 +4,11 @@ All notable changes to Minerva. Versions follow [semantic versioning](https://se
 
 ## Unreleased
 
+### Added
+- **Print**: a printer button on every page (or Ctrl+P) prints just the page: title, byline and content in
+  light colours across the whole sheet, with expand sections opened and long code lines wrapped. The top bar,
+  sidebar, breadcrumbs and page buttons are left out.
+
 ### Changed
 - **Preferences** (theme, page width, spacing, default editor, password) moved out of Settings to its own page,
   opened from the account menu (top right), where the *Settings* link is renamed **Preferences** (`/preferences`).

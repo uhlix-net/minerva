@@ -1,4 +1,4 @@
-import { ChevronRight, Clock, FileText, History, Maximize2, Minimize2, MoreHorizontal, Pencil, RotateCcw, Trash2, X } from "lucide-react";
+import { ChevronRight, Clock, FileText, History, Maximize2, Minimize2, MoreHorizontal, Pencil, Printer, RotateCcw, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { api, pageUrl, timeAgo, type Page } from "../api";
@@ -127,6 +127,9 @@ export function PageView() {
           </Link>
           <button className="btn subtle icon" title={wide ? "Standard width" : "Full width"} aria-label="Toggle width" onClick={() => setPrefs({ width: wide ? "standard" : "full" })}>
             {wide ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
+          <button className="btn subtle icon" title="Print (Ctrl+P)" aria-label="Print" onClick={() => window.print()}>
+            <Printer size={16} />
           </button>
           <button className="btn subtle icon" title="Page history" aria-label="Page history" onClick={() => setHistory(!history)}>
             <History size={16} />
