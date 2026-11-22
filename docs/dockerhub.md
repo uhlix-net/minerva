@@ -10,15 +10,17 @@ Minerva is a modular, self-hosted wiki and knowledge base, in the style of Confl
 - **History**: every save is a version; view and restore old versions
 - **Search**: PostgreSQL full-text search
 - **Themes** (light, dark, high contrast) and per-user page width and spacing
-- **Sign-in**: local accounts, OpenID Connect (Authentik, Keycloak, Entra ID, ...) and LDAP / Active Directory; admin rights can follow IdP groups
+- **Sign-in**: local accounts, OpenID Connect (Authentik, Keycloak, Entra ID, ...) and LDAP / Active Directory; admin rights can follow IdP groups. Configure OIDC and LDAP in the browser under *Settings → Authentication*, with a connection test
+- **User Guide** built in: every markdown option and page element, with live examples
 - **Health checks** for DNS, TLS certificate, database, storage and the IdP under *Settings → System Status*
 
 ## Tags
 
 | Tag | Meaning |
 |---|---|
-| `0.2.5`, `0.2.4`, ... | Release versions (recommended) |
+| `0.3.0`, `0.2.5`, ... | Release versions (recommended) |
 | `latest` | Most recent release |
+| `0.3.0-rc.1`, ... | Release candidates (testing; `latest` does not move) |
 
 Images are `linux/amd64`, run as a non-root user (uid 10001) and listen on port **8080**.
 
@@ -34,7 +36,7 @@ docker run -d --name minerva --network minerva -p 8080:8080 \
   -e MINERVA_BASE_URL=http://localhost:8080 \
   -e MINERVA_SESSION_SECRET="$(openssl rand -hex 32)" \
   -e MINERVA_ADMIN_PASSWORD=change-me \
-  -v minerva-data:/data uhlix/minerva:0.2.5
+  -v minerva-data:/data uhlix/minerva:0.3.0
 ```
 
 Open http://localhost:8080 and sign in as `admin`. The admin account is created only when the database has no users.
