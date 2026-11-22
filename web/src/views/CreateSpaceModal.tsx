@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { api, pageUrl } from "../api";
 
-const COLORS = ["#7a1838", "#0c66e4", "#1f845a", "#b65c02", "#6e5dc6", "#c9372c", "#2e3440", "#0e7490"];
+const COLORS = ["#8e1c1a", "#0c66e4", "#1f845a", "#b65c02", "#6e5dc6", "#c9372c", "#2e3440", "#0e7490"];
 
 export function CreateSpaceModal({ onClose }: { onClose: () => void }) {
   const nav = useNavigate();

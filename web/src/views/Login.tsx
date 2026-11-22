@@ -42,7 +42,7 @@ export function Login() {
   return (
     <div className="login">
       <div className="login-card">
-        <img className="logo" src="/minerva-mark.svg" alt="" />
+        <img className="logo" src="/minerva-mark.png" alt="" />
         <h1>{meta?.siteName ?? "Minerva"}</h1>
         <p className="tag">Knowledge, kept sharp.</p>
         {sso.map((p) => (

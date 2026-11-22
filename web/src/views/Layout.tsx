@@ -156,7 +156,7 @@ export function Layout() {
           </button>
         )}
         <Link to="/" className="brand">
-          <img src="/minerva-mark.svg" alt="" />
+          <img src="/minerva-mark.png" alt="" />
           <span className="hide-sm">{meta?.siteName ?? "Minerva"}</span>
         </Link>
         <nav className="topnav" aria-label="Main">

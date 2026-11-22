@@ -43,7 +43,7 @@ export function Home() {
   return (
     <div className="dash">
       <div className="hero">
-        <img src="/minerva-mark.svg" alt="" />
+        <img src="/minerva-mark.png" alt="" />
         <div>
           <h1>
             {greet}, {me?.display_name.split(" ")[0]}

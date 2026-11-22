@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useSession } from "../App";
 import { DocView } from "../editor/Doc";
 
@@ -94,7 +94,7 @@ const SECTIONS: { id: string; title: string; body: ReactNode }[] = [
       <>
         <Example md={"[Minerva on Docker Hub](https://hub.docker.com/r/uhlix/minerva)\n\nBare URLs link too: https://example.com"} />
         <Example
-          md={"![Minerva logo](/minerva-mark.svg)"}
+          md={"![Minerva logo](/minerva-mark.png)"}
           note={
             <>
               Images: <code>![alt text](url)</code>. In the visual editor, the Image button uploads a file and attaches it to the page.
@@ -247,7 +247,7 @@ function About() {
   return (
     <>
       <div className="card" style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 20 }}>
-        <img src="/minerva-mark.svg" alt="" style={{ width: 56, height: 56 }} />
+        <img src="/minerva-mark.png" alt="" style={{ width: 56, height: 56 }} />
         <div>
           <h3 style={{ margin: 0 }}>{meta?.siteName ?? "Minerva"}</h3>
           <p className="muted" style={{ margin: "4px 0 0" }}>
@@ -284,11 +284,23 @@ function About() {
   );
 }
 
+/** Help: one tab per topic (?tab=...); About is the first and default. Add new tabs to HELP_TABS. */
+const HELP_TABS: { id: string; label: string; view: () => ReactNode }[] = [{ id: "about", label: "About", view: () => <About /> }];
+
 export function HelpView() {
+  const [params, setParams] = useSearchParams();
+  const tab = HELP_TABS.find((t) => t.id === params.get("tab")) ?? HELP_TABS[0];
   return (
     <div className="dash" style={{ maxWidth: 1100 }}>
       <h1 style={{ marginTop: 0 }}>Help</h1>
-      <About />
+      <div className="tabs">
+        {HELP_TABS.map((t) => (
+          <button key={t.id} className={t.id === tab.id ? "on" : ""} onClick={() => setParams(t.id === HELP_TABS[0].id ? {} : { tab: t.id })}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {tab.view()}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/minerva-mark.svg" width="120" alt="Minerva"></p>
+<p align="center"><img src="assets/minerva-mark.png" width="120" alt="Minerva"></p>
 
 # Minerva
 
