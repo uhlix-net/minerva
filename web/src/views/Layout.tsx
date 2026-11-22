@@ -140,8 +140,11 @@ export function Layout() {
   const loc = useLocation();
   const [q, setQ] = useState("");
   const [sidebar, setSidebar] = useState(window.innerWidth > 800);
+  const mainRef = useRef<HTMLElement>(null);
   useEffect(() => {
     if (window.innerWidth <= 800) setSidebar(false);
+    // Pages scroll inside <main>, which stays mounted between routes: start each page at the top.
+    mainRef.current?.scrollTo({ top: 0 });
   }, [loc.pathname]);
 
   return (
@@ -189,7 +192,7 @@ export function Layout() {
       </header>
       <div className="body">
         {key ? <Sidebar spaceKey={key} collapsed={!sidebar} /> : <div />}
-        <main className="main">
+        <main className="main" ref={mainRef}>
           <Outlet />
         </main>
       </div>

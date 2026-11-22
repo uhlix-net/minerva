@@ -77,6 +77,31 @@ interface Heading {
   pos: number;
 }
 
+/** Nearest scrolling ancestor (the app scrolls inside <main>, not the window). */
+function scrollParent(el: HTMLElement): HTMLElement | null {
+  for (let p = el.parentElement; p; p = p.parentElement) {
+    const o = getComputedStyle(p).overflowY;
+    if ((o === "auto" || o === "scroll") && p.scrollHeight > p.clientHeight) return p;
+  }
+  return null;
+}
+
+/**
+ * Scroll a heading to just below the sticky bar at the top of the page (breadcrumbs when reading,
+ * the toolbar when editing). scrollIntoView() would put it under that bar.
+ */
+export function scrollToHeading(el: HTMLElement) {
+  const box = scrollParent(el);
+  if (!box) return el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const top = box.getBoundingClientRect().top;
+  let cover = 0;
+  box.querySelectorAll<HTMLElement>(".page-bar, .toolbar").forEach((bar) => {
+    if (getComputedStyle(bar).position === "sticky") cover = Math.max(cover, bar.offsetHeight);
+  });
+  const y = box.scrollTop + el.getBoundingClientRect().top - top - cover - 12;
+  box.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+}
+
 function TocView({ editor }: NodeViewProps) {
   const [items, setItems] = useState<Heading[]>([]);
   useEffect(() => {
@@ -97,7 +122,7 @@ function TocView({ editor }: NodeViewProps) {
   const min = Math.min(...items.map((i) => i.level), 6);
   const go = (pos: number) => {
     const dom = editor.view.nodeDOM(pos) as HTMLElement | null;
-    dom?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (dom) scrollToHeading(dom);
   };
   return (
     <NodeViewWrapper className="el-toc" contentEditable={false} data-type="toc">
