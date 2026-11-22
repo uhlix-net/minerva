@@ -3,6 +3,7 @@ import { useSession } from "../App";
 import { api } from "../api";
 import { useSearchParams } from "react-router";
 import { DENSITIES, THEMES, usePrefs, WIDTHS } from "../prefs";
+import { SystemStatus } from "./SystemStatus";
 import { AuthSettings } from "./AuthSettings";
 
 export function SettingsView() {
@@ -12,7 +13,8 @@ export function SettingsView() {
   const [next, setNext] = useState("");
   const [msg, setMsg] = useState("");
   const [params, setParams] = useSearchParams();
-  const tab = me?.is_admin && params.get("tab") === "auth" ? "auth" : "prefs";
+  const asked = params.get("tab");
+  const tab = me?.is_admin && (asked === "auth" || asked === "status") ? asked : "prefs";
 
   const changePw = async (e: FormEvent) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ export function SettingsView() {
   };
 
   return (
-    <div className="dash" style={{ maxWidth: 900 }}>
+    <div className="dash" style={{ maxWidth: tab === "prefs" ? 900 : 1100 }}>
       <h1 style={{ marginTop: 0 }}>Settings</h1>
       {me?.is_admin && (
         <div className="tabs">
@@ -37,10 +39,15 @@ export function SettingsView() {
           <button className={tab === "auth" ? "on" : ""} onClick={() => setParams({ tab: "auth" })}>
             Authentication
           </button>
+          <button className={tab === "status" ? "on" : ""} onClick={() => setParams({ tab: "status" })}>
+            System Status
+          </button>
         </div>
       )}
       {tab === "auth" ? (
         <AuthSettings />
+      ) : tab === "status" ? (
+        <SystemStatus />
       ) : (
         <>
 

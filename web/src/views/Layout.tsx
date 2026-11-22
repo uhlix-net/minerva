@@ -1,4 +1,4 @@
-import { Check, ChevronDown, Info, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings, Shield } from "lucide-react";
+import { BookOpen, Check, ChevronDown, CircleHelp, LayoutGrid, LogOut, Palette, PanelLeft, Plus, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router";
 import { useSession } from "../App";
@@ -99,11 +99,6 @@ function UserMenu() {
           <Link className="item" to="/settings">
             <Settings size={16} /> Settings
           </Link>
-          {me.is_admin && (
-            <Link className="item" to="/admin">
-              <Shield size={16} /> Administration
-            </Link>
-          )}
           <hr />
           <button className="item" onClick={logout}>
             <LogOut size={16} /> Sign out
@@ -136,6 +131,8 @@ function CreateButton() {
   );
 }
 
+const navCls = ({ isActive }: { isActive: boolean }) => `btn subtle${isActive ? " on" : ""}`;
+
 export function Layout() {
   const { meta } = useSession();
   const { key } = useParams();
@@ -160,18 +157,11 @@ export function Layout() {
           <span className="hide-sm">{meta?.siteName ?? "Minerva"}</span>
         </Link>
         <nav className="topnav" aria-label="Main">
-          <NavLink to="/spaces" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
+          <NavLink to="/spaces" className={navCls}>
             <LayoutGrid size={16} /> <span className="hide-sm">Spaces</span>
-          </NavLink>
-          <NavLink to="/settings" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
-            <Settings size={16} /> <span className="hide-sm">Settings</span>
-          </NavLink>
-          <NavLink to="/about" className={({ isActive }) => `btn subtle${isActive ? " on" : ""}`}>
-            <Info size={16} /> <span className="hide-sm">About</span>
           </NavLink>
         </nav>
         <CreateButton />
-        <span className="spacer" />
         <form
           className="search-box"
           onSubmit={(e) => {
@@ -182,6 +172,18 @@ export function Layout() {
           <Search size={15} />
           <input className="input" placeholder="Search" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search" />
         </form>
+        <span className="spacer" />
+        <nav className="topnav" aria-label="Settings and help">
+          <NavLink to="/settings" className={navCls}>
+            <Settings size={16} /> <span className="hide-sm">Settings</span>
+          </NavLink>
+          <NavLink to="/help" className={navCls}>
+            <CircleHelp size={16} /> <span className="hide-sm">Help</span>
+          </NavLink>
+          <NavLink to="/guide" className={navCls}>
+            <BookOpen size={16} /> <span className="hide-sm">User Guide</span>
+          </NavLink>
+        </nav>
         <AppearanceMenu />
         <UserMenu />
       </header>

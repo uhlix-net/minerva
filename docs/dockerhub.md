@@ -11,7 +11,7 @@ Minerva is a modular, self-hosted wiki and knowledge base, in the style of Confl
 - **Search**: PostgreSQL full-text search
 - **Themes** (light, dark, high contrast) and per-user page width and spacing
 - **Sign-in**: local accounts, OpenID Connect (Authentik, Keycloak, Entra ID, ...) and LDAP / Active Directory; admin rights can follow IdP groups
-- **Health checks** for DNS, TLS certificate, database, storage and the IdP under *Administration → System health*
+- **Health checks** for DNS, TLS certificate, database, storage and the IdP under *Settings → System Status*
 
 ## Tags
 

@@ -233,16 +233,16 @@ function Modules() {
   );
 }
 
-export function AdminView() {
+/** Settings > System Status (admins): health checks, users, modules. */
+export function SystemStatus() {
   const [tab, setTab] = useState<"health" | "users" | "modules">("health");
   const { meta } = useSession();
   return (
-    <div className="dash">
-      <h1 style={{ marginTop: 0 }}>Administration</h1>
-      <p className="muted" style={{ marginTop: -8 }}>
+    <>
+      <p className="muted" style={{ marginTop: 0 }}>
         {meta?.siteName} {meta?.version}
       </p>
-      <div className="tabs">
+      <div className="tabs subtabs">
         <button className={tab === "health" ? "on" : ""} onClick={() => setTab("health")}>
           System health
         </button>
@@ -254,6 +254,6 @@ export function AdminView() {
         </button>
       </div>
       {tab === "health" ? <Health /> : tab === "users" ? <Users /> : <Modules />}
-    </div>
+    </>
   );
 }

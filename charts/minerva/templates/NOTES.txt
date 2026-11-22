@@ -3,7 +3,7 @@ Minerva {{ .Chart.AppVersion }} is installed.
   URL:   {{ .Values.baseUrl }}
   Admin: {{ if .Values.admin.existingSecret }}from secret {{ .Values.admin.existingSecret }}{{ else }}{{ .Values.admin.username }} (password from values; change it after the first sign-in){{ end }}
 
-Health checks (DNS, TLS, database, storage, SSO) are under Administration > System health.
+Health checks (DNS, TLS, database, storage, SSO) are under Settings > System Status.
 {{- if and (not .Values.oidc.enabled) (not .Values.ldap.enabled) }}
 Only internal accounts are enabled. Set oidc.* or ldap.* to add single sign-on.
 {{- end }}

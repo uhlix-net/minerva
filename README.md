@@ -30,13 +30,13 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
   LDAP / Active Directory. Admin rights can follow IdP groups. Administrators configure OIDC and LDAP in
   the web UI under **Settings → Authentication** (with a connection test and an LDAP test sign-in);
   values saved there are stored in the database and override the Helm values / environment.
-- **Help**: **About → Help** shows every markdown option and page element, with the markdown next to
+- **User Guide** (top bar) shows every markdown option and page element, with the markdown next to
   the rendered result.
 - **Modules**: auth providers, environment checks and features are modules; third-party modules load
   from `MINERVA_PLUGIN_DIR`.
 - **Install checks**: the Helm chart refuses to install when the StorageClass, TLS secret or referenced
   secrets are missing, and a pre-install Job checks DNS, the certificate (host name, expiry) and the
-  IdP/LDAP before anything changes. The same checks run under *Administration → System health*.
+  IdP/LDAP before anything changes. The same checks run under *Settings → System Status*.
 
 ## Install with Helm
 

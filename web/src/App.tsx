@@ -11,8 +11,7 @@ import { PageView } from "./views/PageView";
 import { PageEdit } from "./views/PageEdit";
 import { SearchView } from "./views/SearchView";
 import { SettingsView } from "./views/SettingsView";
-import { AdminView } from "./views/AdminView";
-import { AboutView } from "./views/AboutView";
+import { HelpView, UserGuideView } from "./views/HelpView";
 
 interface Session {
   me: Me | null;
@@ -66,8 +65,10 @@ export function App() {
               <Route path="/s/:key/p/:id/edit" element={<PageEdit />} />
               <Route path="/search" element={<SearchView />} />
               <Route path="/settings" element={<SettingsView />} />
-              <Route path="/about" element={<AboutView />} />
-              {me.is_admin && <Route path="/admin" element={<AdminView />} />}
+              <Route path="/help" element={<HelpView />} />
+              <Route path="/guide" element={<UserGuideView />} />
+              <Route path="/about" element={<Navigate to="/help" replace />} />
+              <Route path="/admin" element={<Navigate to="/settings?tab=status" replace />} />
               <Route path="*" element={<div className="dash">Page not found.</div>} />
             </Route>
           </Routes>

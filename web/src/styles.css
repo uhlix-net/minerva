@@ -1600,3 +1600,10 @@ label.toggle {
 .help-example .help-out .doc > :last-child {
   margin-bottom: 0;
 }
+.tabs.subtabs {
+  border-bottom-width: 1px;
+}
+.tabs.subtabs button {
+  font-weight: 500;
+  padding: 6px 12px;
+}

@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { useSession } from "../App";
 import { DocView } from "../editor/Doc";
 
@@ -218,7 +218,7 @@ const SECTIONS: { id: string; title: string; body: ReactNode }[] = [
   },
 ];
 
-function Help() {
+function UserGuide() {
   return (
     <>
       <p className="muted" style={{ marginTop: 0 }}>
@@ -271,33 +271,33 @@ function About() {
           {me?.is_admin && (
             <>
               {" "}
-              Configure them under <Link to="/settings?tab=auth">Settings &gt; Authentication</Link>.
+              Configure them under <Link to="/settings?tab=auth">Settings &gt; Authentication</Link>; server health and users are under{" "}
+              <Link to="/settings?tab=status">Settings &gt; System Status</Link>.
             </>
           )}
         </li>
       </ul>
       <p>
-        New to writing pages? See <Link to="/about?tab=help">Help</Link> for all the markdown options and page elements.
+        New to writing pages? The <Link to="/guide">User Guide</Link> shows all the markdown options and page elements.
       </p>
     </>
   );
 }
 
-export function AboutView() {
-  const [params, setParams] = useSearchParams();
-  const tab = params.get("tab") === "help" ? "help" : "about";
+export function HelpView() {
   return (
     <div className="dash" style={{ maxWidth: 1100 }}>
-      <h1 style={{ marginTop: 0 }}>{tab === "help" ? "Help" : "About"}</h1>
-      <div className="tabs">
-        <button className={tab === "about" ? "on" : ""} onClick={() => setParams({})}>
-          About
-        </button>
-        <button className={tab === "help" ? "on" : ""} onClick={() => setParams({ tab: "help" })}>
-          Help
-        </button>
-      </div>
-      {tab === "help" ? <Help /> : <About />}
+      <h1 style={{ marginTop: 0 }}>Help</h1>
+      <About />
+    </div>
+  );
+}
+
+export function UserGuideView() {
+  return (
+    <div className="dash" style={{ maxWidth: 1100 }}>
+      <h1 style={{ marginTop: 0 }}>User Guide</h1>
+      <UserGuide />
     </div>
   );
 }
