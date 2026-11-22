@@ -3,7 +3,7 @@ import { useSession } from "../App";
 import { api } from "../api";
 import { useSearchParams } from "react-router";
 import { DENSITIES, THEMES, usePrefs, WIDTHS } from "../prefs";
-import { SystemStatus } from "./SystemStatus";
+import { SystemStatus, Users } from "./SystemStatus";
 import { AuthSettings } from "./AuthSettings";
 
 export function SettingsView() {
@@ -14,7 +14,7 @@ export function SettingsView() {
   const [msg, setMsg] = useState("");
   const [params, setParams] = useSearchParams();
   const asked = params.get("tab");
-  const tab = me?.is_admin && (asked === "auth" || asked === "status") ? asked : "prefs";
+  const tab = me?.is_admin && (asked === "auth" || asked === "users" || asked === "status") ? asked : "prefs";
 
   const changePw = async (e: FormEvent) => {
     e.preventDefault();
@@ -39,6 +39,9 @@ export function SettingsView() {
           <button className={tab === "auth" ? "on" : ""} onClick={() => setParams({ tab: "auth" })}>
             Authentication
           </button>
+          <button className={tab === "users" ? "on" : ""} onClick={() => setParams({ tab: "users" })}>
+            Users
+          </button>
           <button className={tab === "status" ? "on" : ""} onClick={() => setParams({ tab: "status" })}>
             System Status
           </button>
@@ -46,6 +49,8 @@ export function SettingsView() {
       )}
       {tab === "auth" ? (
         <AuthSettings />
+      ) : tab === "users" ? (
+        <Users />
       ) : tab === "status" ? (
         <SystemStatus />
       ) : (

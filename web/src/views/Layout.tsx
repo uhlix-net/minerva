@@ -177,11 +177,11 @@ export function Layout() {
           <NavLink to="/settings" className={navCls}>
             <Settings size={16} /> <span className="hide-sm">Settings</span>
           </NavLink>
-          <NavLink to="/help" className={navCls}>
-            <CircleHelp size={16} /> <span className="hide-sm">Help</span>
-          </NavLink>
           <NavLink to="/guide" className={navCls}>
             <BookOpen size={16} /> <span className="hide-sm">User Guide</span>
+          </NavLink>
+          <NavLink to="/help" className={navCls}>
+            <CircleHelp size={16} /> <span className="hide-sm">Help</span>
           </NavLink>
         </nav>
         <AppearanceMenu />

@@ -271,7 +271,7 @@ function About() {
           {me?.is_admin && (
             <>
               {" "}
-              Configure them under <Link to="/settings?tab=auth">Settings &gt; Authentication</Link>; server health and users are under{" "}
+              Configure them under <Link to="/settings?tab=auth">Settings &gt; Authentication</Link>; users under <Link to="/settings?tab=users">Settings &gt; Users</Link>; server health under{" "}
               <Link to="/settings?tab=status">Settings &gt; System Status</Link>.
             </>
           )}

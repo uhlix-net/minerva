@@ -31,7 +31,8 @@ interface CheckRow {
   detail: string;
 }
 
-function Users() {
+/** Settings > Users (admins). */
+export function Users() {
   const { me } = useSession();
   const [users, setUsers] = useState<User[]>([]);
   const [adding, setAdding] = useState(false);
@@ -235,7 +236,7 @@ function Modules() {
 
 /** Settings > System Status (admins): health checks, users, modules. */
 export function SystemStatus() {
-  const [tab, setTab] = useState<"health" | "users" | "modules">("health");
+  const [tab, setTab] = useState<"health" | "modules">("health");
   const { meta } = useSession();
   return (
     <>
@@ -246,14 +247,11 @@ export function SystemStatus() {
         <button className={tab === "health" ? "on" : ""} onClick={() => setTab("health")}>
           System health
         </button>
-        <button className={tab === "users" ? "on" : ""} onClick={() => setTab("users")}>
-          Users
-        </button>
         <button className={tab === "modules" ? "on" : ""} onClick={() => setTab("modules")}>
           Modules
         </button>
       </div>
-      {tab === "health" ? <Health /> : tab === "users" ? <Users /> : <Modules />}
+      {tab === "health" ? <Health /> : <Modules />}
     </>
   );
 }
