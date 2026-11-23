@@ -23,9 +23,10 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 - **History**: every publish is a version; view and restore old versions. Optimistic locking stops
   silent overwrites.
 - **Search**: PostgreSQL full-text search with highlighted snippets.
+- **Print** any page (printer button or Ctrl+P): just the content, in light colours, expand sections opened.
 - **Themes**: Daylight, Midnight, Rosewood, Nord, Solarized, High contrast.
   **Page width** (Narrow, Standard, Wide, Full width) and **spacing** (Compact, Comfortable,
-  Spacious) per user.
+  Spacious) per user, under **Preferences** in the account menu.
 - **Authentication**: internal accounts (argon2id), OpenID Connect (Authentik, Keycloak, Entra ID, ...),
   LDAP / Active Directory. Admin rights can follow IdP groups. Administrators configure OIDC and LDAP in
   the web UI under **Settings → Authentication** (with a connection test and an LDAP test sign-in);
@@ -44,7 +45,7 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
 kubectl create namespace minerva
 kubectl -n minerva create secret tls minerva-tls --cert=tls.crt --key=tls.key
 # chart: minerva-<version>.tgz from https://github.com/uhlix-net/minerva/releases
-helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.3.1/minerva-0.3.1.tgz \
+helm install minerva https://github.com/uhlix-net/minerva/releases/download/v0.3.2/minerva-0.3.2.tgz \
   --namespace minerva \
   --set baseUrl=https://wiki.example.com \
   --set ingress.tls.secretName=minerva-tls

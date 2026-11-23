@@ -2,7 +2,7 @@
 
 All notable changes to Minerva. Versions follow [semantic versioning](https://semver.org/).
 
-## Unreleased
+## 0.3.2 (2026-11-22)
 
 ### Added
 - **Print**: a printer button on every page (or Ctrl+P) prints just the page: title, byline and content in

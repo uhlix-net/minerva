@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/uhlix-net/minerva/main/assets/minerva-mark.png" width="140" alt="Minerva logo"></p>
+
 # Minerva
 
 Minerva is a modular, self-hosted wiki and knowledge base, in the style of Confluence. One container serves the web app and the API; PostgreSQL holds the pages.
@@ -8,6 +10,7 @@ Minerva is a modular, self-hosted wiki and knowledge base, in the style of Confl
 - **Editor**: rich text (headings, colors, tables, task lists, images, code blocks with highlighting, Mermaid diagrams), with a switch to **Markdown** at any time
 - **Page elements**: table of contents, info/tip/warning panels, expand sections, status labels, child-page lists. Each has a markdown form (`{{toc}}`, `> [!WARNING]`, `<details>`, `{{status:green:Done}}`, `{{children}}`)
 - **History**: every save is a version; view and restore old versions
+- **Print** any page: just the content, in light colours, with expand sections opened
 - **Search**: PostgreSQL full-text search
 - **Themes** (light, dark, high contrast) and per-user page width and spacing
 - **Sign-in**: local accounts, OpenID Connect (Authentik, Keycloak, Entra ID, ...) and LDAP / Active Directory; admin rights can follow IdP groups. Configure OIDC and LDAP in the browser under *Settings → Authentication*, with a connection test
@@ -18,9 +21,9 @@ Minerva is a modular, self-hosted wiki and knowledge base, in the style of Confl
 
 | Tag | Meaning |
 |---|---|
-| `0.3.1`, `0.3.0`, ... | Release versions (recommended) |
+| `0.3.2`, `0.3.1`, ... | Release versions (recommended) |
 | `latest` | Most recent release |
-| `0.3.1-rc.1`, ... | Release candidates (testing; `latest` does not move) |
+| `0.3.2-rc.1`, ... | Release candidates (testing; `latest` does not move) |
 
 Images are `linux/amd64`, run as a non-root user (uid 10001) and listen on port **8080**.
 
@@ -36,7 +39,7 @@ docker run -d --name minerva --network minerva -p 8080:8080 \
   -e MINERVA_BASE_URL=http://localhost:8080 \
   -e MINERVA_SESSION_SECRET="$(openssl rand -hex 32)" \
   -e MINERVA_ADMIN_PASSWORD=change-me \
-  -v minerva-data:/data uhlix/minerva:0.3.1
+  -v minerva-data:/data uhlix/minerva:0.3.2
 ```
 
 Open http://localhost:8080 and sign in as `admin`. The admin account is created only when the database has no users.
