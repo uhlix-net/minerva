@@ -39,6 +39,19 @@ single sign-on. Runs on Kubernetes from one container plus PostgreSQL.
   secrets are missing, and a pre-install Job checks DNS, the certificate (host name, expiry) and the
   IdP/LDAP before anything changes. The same checks run under *Settings → System Status*.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Reading a runbook in the Rosewood theme](docs/screenshots/page-rosewood.png) | ![Home: spaces and recently updated pages](docs/screenshots/home.png) |
+| Reading a page (Rosewood theme) | Home: spaces and recent pages |
+| ![Mermaid diagram and status labels in the Daylight theme](docs/screenshots/diagram-daylight.png) | ![Visual editor in the Midnight theme](docs/screenshots/editor-midnight.png) |
+| Diagrams and status labels (Daylight) | Visual editor (Midnight) |
+| ![Page history](docs/screenshots/history.png) | ![User Guide: panels](docs/screenshots/user-guide.png) |
+| Page history | Built-in User Guide |
+
+The screenshots use made-up demo content.
+
 ## Install with Helm
 
 ```bash
